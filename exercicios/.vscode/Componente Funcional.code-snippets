@@ -14,7 +14,7 @@
 			"",
 			"    return (",
 			"        <Fragment>",
-			"            <Text style={Estilo.txtG}></Text>",
+			"            <Text style={Estilo.txtG}>",
 			"",
 			"            </Text>",
 			"        </Fragment>",
