@@ -9,7 +9,7 @@ import {
 export default props => {
     const stylesButton = [styles.button]
     if (props.double) stylesButton.push(styles.buttonDouble)
-    if (props.triple) stylesButton.push(styles.buttonTrile)
+    if (props.triple) stylesButton.push(styles.buttonTriple)
     if (props.operation) stylesButton.push(styles.operationButton)
 
     return (
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     buttonDouble: {
         width: (Dimensions.get('window').width / 4) * 2,
     },
-    buttonTrile: {
+    buttonTriple: {
         width: (Dimensions.get('window').width / 4) * 3,
     }
 })
