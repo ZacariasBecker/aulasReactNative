@@ -1,38 +1,114 @@
-import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import React, { Component } from 'react'
+import {
+  View,
+  Text,
+  StyleSheet,
+  Alert,
+} from 'react-native'
 
 import params from './params'
-import Field from './components/Field'
+import Header from './components/header'
+import LevelSelection from './components/screens/LevelSelection'
+import MineField from './components/MineField'
+import {
+  createMinedBoard,
+  cloneBoard,
+  openField,
+  hadExplosion,
+  showMines,
+  wonGame,
+  invertFlag,
+  flagsUsed,
 
-export default props => {
-  return (
-    <View style={style.container}>
-      <Text style={style.welcome}>Iniciando o Mines</Text>
-      <Text style={style.welcome}>Tamanho da grade:
-      {params.getColumnsAmount()}x{params.getRowsAmount()}
-      </Text>
-      <Field />
-      <Field opened />
-      <Field opened nearMines={1} />
-      <Field opened nearMines={2} />
-      <Field opened nearMines={3} />
-      <Field opened nearMines={6} />
-      <Field mined />
-      <Field mined opened />
-      <Field mined opened exploded />
-      <Field flagged />
-      <Field flagged opened />
-    </View>
-  )
+} from './functions'
+
+export default class App extends Component {
+
+  constructor(props) {
+    super(props)
+    this.state = this.createState()
+  }
+
+  minesAmount = () => {
+    const columns = params.getColumnsAmount()
+    const rows = params.getRowsAmount()
+    return Math.ceil(columns * rows * params.difficultLevel)
+  }
+
+  createState = () => {
+    const columns = params.getColumnsAmount()
+    const rows = params.getRowsAmount()
+    return {
+      board: createMinedBoard(rows, columns, this.minesAmount()),
+      won: false,
+      lost: false,
+      showLevelSelection: false,
+    }
+  }
+
+  onOpenField = (row, column) => {
+    const board = cloneBoard(this.state.board)
+    openField(board, row, column)
+    const lost = hadExplosion(board)
+    const won = wonGame(board)
+
+    if (lost) {
+      showMines(board)
+      Alert('Perdeu!', 'Boa sorte na próxima!')
+    }
+
+    if (won) {
+      Alert('Parabéns!', 'Você ganhou!')
+    }
+
+    this.setState({ board, lost, won })
+  }
+
+  onSelectField = (row, column) => {
+    const board = cloneBoard(this.state.board)
+    invertFlag(board, row, column)
+    const won = wonGame(board)
+
+    if (won) {
+      Alert('Parabéns!', 'Você ganhou!')
+    }
+
+    this.setState({ board, won })
+  }
+
+  onLevelSelected = level => {
+    params.difficultLevel = level
+    this.setState(this.createState())
+  }
+
+  render() {
+    return (
+      <View style={styles.container}>
+        <LevelSelection
+          isVisible={this.state.showLevelSelection}
+          onLevelSelect={this.onLevelSelected}
+          onCancel={() => this.setState({ showLevelSelection: false })} />
+        <Header flagsLeft={this.minesAmount() - flagsUsed(this.state.board)}
+          onNewGame={() => this.setState(this.createState())}
+          onFlagPress={() => this.setState({ showLevelSelection: true })} />
+        <View style={styles.board} >
+          <MineField board={this.state.board}
+            onOpenField={this.onOpenField}
+            onSelectField={this.onSelectField}
+          />
+        </View>
+      </View>
+    )
+  }
 }
 
-const style = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: 'flex-end',
   },
-  welcome: {
-
-  }
+  board: {
+    alignItems: 'center',
+    backgroundColor: '#AAA',
+  },
 })
