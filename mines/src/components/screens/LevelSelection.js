@@ -9,33 +9,25 @@ import {
 
 export default props => {
     return (
-        <Modal
-            onRequestClose={props.onCancel}
-            visible={props.isVisible}
-            animationType='slide'
-            transparent={true}
-        >
+        <Modal onRequestClose={props.onCancel}
+            visible={props.isVisible} animationType='slide'
+            transparent={true}>
             <View style={styles.frame}>
                 <View style={styles.container}>
-                    <Text style={styles.title}>
-                        Selecione o nível
-                    </Text>
+                    <Text style={styles.title}>Selecione o Nível</Text>
                     <TouchableOpacity
                         style={[styles.button, styles.bgEasy]}
-                        onPress={onLevelSelected(0.1)}
-                    >
+                        onPress={() => props.onLevelSelected(0.1)}>
                         <Text style={styles.buttonLabel}>Fácil</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={[styles.button, styles.bgNormal]}
-                        onPress={onLevelSelected(0.2)}
-                    >
-                        <Text style={styles.buttonLabel}>Normal</Text>
+                        onPress={() => props.onLevelSelected(0.2)}>
+                        <Text style={styles.buttonLabel}>Intermediário</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                        style={[styles.button, styles.bgDificil]}
-                        onPress={onLevelSelected(0.3)}
-                    >
+                        style={[styles.button, styles.bgHard]}
+                        onPress={() => props.onLevelSelected(0.3)}>
                         <Text style={styles.buttonLabel}>Difícil</Text>
                     </TouchableOpacity>
                 </View>
@@ -45,17 +37,17 @@ export default props => {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        backgroundColor: '#EEE',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 15,
-    },
     frame: {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: 'rgba(0,0,0,0.6)',
+    },
+    container: {
+        backgroundColor: '#EEE',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 15,
     },
     title: {
         fontSize: 30,
@@ -67,7 +59,7 @@ const styles = StyleSheet.create({
     },
     buttonLabel: {
         fontSize: 20,
-        backgroundColor: '#EEE',
+        color: '#EEE',
         fontWeight: 'bold',
     },
     bgEasy: {
@@ -76,7 +68,7 @@ const styles = StyleSheet.create({
     bgNormal: {
         backgroundColor: '#2765F7'
     },
-    bgDificil: {
+    bgHard: {
         backgroundColor: '#F26337'
     }
 })

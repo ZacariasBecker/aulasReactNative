@@ -30,16 +30,16 @@ export default class App extends Component {
   }
 
   minesAmount = () => {
-    const columns = params.getColumnsAmount()
+    const cols = params.getColumnsAmount()
     const rows = params.getRowsAmount()
-    return Math.ceil(columns * rows * params.difficultLevel)
+    return Math.ceil(cols * rows * params.difficultLevel)
   }
 
   createState = () => {
-    const columns = params.getColumnsAmount()
+    const cols = params.getColumnsAmount()
     const rows = params.getRowsAmount()
     return {
-      board: createMinedBoard(rows, columns, this.minesAmount()),
+      board: createMinedBoard(rows, cols, this.minesAmount()),
       won: false,
       lost: false,
       showLevelSelection: false,
@@ -54,11 +54,11 @@ export default class App extends Component {
 
     if (lost) {
       showMines(board)
-      Alert('Perdeu!', 'Boa sorte na próxima!')
+      Alert.alert('Perdeu!', 'Tente outra vez!')
     }
 
     if (won) {
-      Alert('Parabéns!', 'Você ganhou!')
+      Alert.alert('Parabéns', 'Você Venceu!')
     }
 
     this.setState({ board, lost, won })
@@ -70,7 +70,7 @@ export default class App extends Component {
     const won = wonGame(board)
 
     if (won) {
-      Alert('Parabéns!', 'Você ganhou!')
+      Alert.alert('Parabéns', 'Você Venceu!')
     }
 
     this.setState({ board, won })
@@ -84,31 +84,29 @@ export default class App extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <LevelSelection
-          isVisible={this.state.showLevelSelection}
-          onLevelSelect={this.onLevelSelected}
+        <LevelSelection isVisible={this.state.showLevelSelection}
+          onLevelSelected={this.onLevelSelected}
           onCancel={() => this.setState({ showLevelSelection: false })} />
         <Header flagsLeft={this.minesAmount() - flagsUsed(this.state.board)}
           onNewGame={() => this.setState(this.createState())}
           onFlagPress={() => this.setState({ showLevelSelection: true })} />
-        <View style={styles.board} >
+        <View style={styles.board}>
           <MineField board={this.state.board}
             onOpenField={this.onOpenField}
-            onSelectField={this.onSelectField}
-          />
+            onSelectField={this.onSelectField} />
         </View>
       </View>
-    )
+    );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-end'
   },
   board: {
     alignItems: 'center',
-    backgroundColor: '#AAA',
-  },
-})
+    backgroundColor: '#AAA'
+  }
+});
